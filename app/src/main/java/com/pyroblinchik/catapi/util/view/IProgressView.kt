@@ -1,4 +1,4 @@
-package com.pyroblinchik.newsfinder.util.view
+package com.pyroblinchik.catapi.util.view
 
 interface IProgressView {
     fun showLoading()

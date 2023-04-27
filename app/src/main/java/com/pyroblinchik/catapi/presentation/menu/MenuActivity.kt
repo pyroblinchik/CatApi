@@ -8,22 +8,15 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.ProgressBar
 import androidx.activity.result.ActivityResultLauncher
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.pyroblinchik.catapi.R
 import com.pyroblinchik.catapi.databinding.ActivityMenuBinding
 import com.pyroblinchik.catapi.util.view.gone
 import com.pyroblinchik.catapi.util.view.visible
-import com.pyroblinchik.newsfinder.util.view.IProgressView
-import com.pyroblinchik.newsfinder.util.view.ISetToolbar
+import com.pyroblinchik.catapi.util.view.IProgressView
+import com.pyroblinchik.catapi.util.view.ISetToolbar
 import timber.log.Timber
 
 class MenuActivity : AppCompatActivity(), ISetToolbar, IProgressView {

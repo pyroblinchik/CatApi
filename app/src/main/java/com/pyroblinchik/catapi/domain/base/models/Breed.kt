@@ -2,7 +2,7 @@ package com.pyroblinchik.catapi.domain.base.models
 
 
 data class Breed(
-    var id: Int = 0,
+    var id: String = "0",
     var weight: Weight? = null,
     var name: String? = null,
     var temperament: String? = null,
@@ -33,7 +33,7 @@ data class Breed(
     var rare: Int? = null,
     var rex: Int? = null,
     var suppressedTail: Int? = null,
-    var short_legs: Int? = null,
+    var shortLegs: Int? = null,
     var wikipediaUrl: String? = null,
     var hypoallergenic: Int? = null,
     var referenceImageId: Int? = null
