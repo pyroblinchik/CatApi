@@ -1,12 +1,19 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id "kotlin-kapt"
 }
 
 android {
     namespace 'com.pyroblinchik.catapi'
     compileSdk 33
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+    compileSdkVersion 33
 
+    buildToolsVersion "33.0.0"
     defaultConfig {
         applicationId "com.pyroblinchik.catapi"
         minSdk 24
@@ -17,19 +24,26 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    applicationVariants.all { variant ->
+        variant.outputs.each { output ->
+            def apkName = "Cat-Api-${variant.buildType.name}-v.${variant.versionName}.apk"
+            output.outputFileName = new File(apkName, output.outputFile.name)
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+    buildFeatures {
+        viewBinding true
     }
-    kotlinOptions {
-        jvmTarget = '1.8'
-    }
+}
+java{
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
 }
 
 dependencies {
@@ -38,6 +52,45 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.8.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+
+    // NETWORK
+    implementation group: 'com.google.code.gson', name: 'gson', version: '2.9.0'
+    implementation('com.squareup.retrofit2:retrofit:2.9.0') {
+        exclude(group: 'com.squareup.retrofit2')
+    }
+    implementation 'com.squareup.okhttp3:okhttp:5.0.0-alpha.5'
+    implementation('com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.5') {
+        exclude(group: 'com.squareup.okhttp3')
+    }
+    implementation('com.squareup.retrofit2:converter-gson:2.9.0') {
+        exclude(group: 'com.google.code.gson')
+        exclude(group: 'com.squareup.retrofit2')
+    }
+
+    // DATABASE
+    implementation "androidx.room:room-runtime:2.5.1"
+    implementation "androidx.room:room-ktx:2.5.1"
+    kapt "androidx.room:room-compiler:2.5.1"
+
+    // COROUTINES
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4"
+    implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.5")
+
+    // DAGGER
+    implementation 'com.google.dagger:dagger-android:2.20'
+    implementation 'com.google.dagger:dagger-android-support:2.20'
+    kapt 'com.google.dagger:dagger-android-processor:2.20'
+    kapt 'com.google.dagger:dagger-compiler:2.20'
+
+    // GLIDE
+    implementation 'com.github.bumptech.glide:glide:4.13.0'
+    kapt 'com.github.bumptech.glide:compiler:4.13.0'
+
+    // TIMBER
+    implementation "com.jakewharton.timber:timber:4.7.1"
+
+    // TESTS
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
