@@ -9,8 +9,7 @@ import com.pyroblinchik.catapi.domain.breeds.BreedsRepository
 import timber.log.Timber
 
 class BreedsRepositoryImpl constructor(
-    private val mapper: BreedsMapper,
-    private val application: Application
+    private val mapper: BreedsMapper
 ) : BreedsRepository {
 
     override suspend fun getBreedsListFromNetwork(): List<BreedShort> {
