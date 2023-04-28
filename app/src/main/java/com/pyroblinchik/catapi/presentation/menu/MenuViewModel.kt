@@ -1,7 +1,5 @@
 package com.pyroblinchik.catapi.presentation.menu
 
-import android.app.Activity
-import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,15 +7,12 @@ import androidx.lifecycle.viewModelScope
 import com.pyroblinchik.catapi.domain.base.models.BreedShort
 import com.pyroblinchik.catapi.domain.breeds.GetBreedByIdFromNetworkUseCase
 import com.pyroblinchik.catapi.domain.breeds.GetBreedsListFromNetworkUseCase
-import com.pyroblinchik.catapi.domain.breedsFavorites.AddBreedToFavoritesDatabaseUseCase
-import com.pyroblinchik.catapi.domain.breedsFavorites.GetBreedFavoriteByIdFromDatabaseUseCase
-import com.pyroblinchik.catapi.domain.breedsFavorites.GetBreedsFavoritesListFromDatabaseUseCase
+import com.pyroblinchik.catapi.domain.breeds.AddBreedToFavoritesDatabaseUseCase
+import com.pyroblinchik.catapi.domain.breeds.GetBreedsFavoritesListFromDatabaseUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import timber.log.Timber
-import java.util.*
 import javax.inject.Inject
 
 class MenuViewModel @Inject constructor(
@@ -44,10 +39,10 @@ class MenuViewModel @Inject constructor(
     val uiState: StateFlow<MenuUIState> = _uiState
 
     init {
-        getBreeds()
+//        getBreeds()
     }
 
-    private fun getBreeds() {
+    fun getBreeds() {
         _uiState.value = MenuUIState.Loading
         viewModelScope.launch(Dispatchers.IO) {
             try {
@@ -62,14 +57,14 @@ class MenuViewModel @Inject constructor(
         }
     }
 
-    private fun getBreedsFavorites() {
+    fun getBreedsFavorites() {
         _uiState.value = MenuUIState.Loading
         viewModelScope.launch(Dispatchers.IO) {
             try {
 
                 val breedsFavorites = getBreedsFavoritesListFromDatabaseUseCase.invoke()
-                _breeds.postValue(breedsFavorites)
-                MenuUIState.Loaded
+                _breedsFavorites.postValue(breedsFavorites)
+                _uiState.value = MenuUIState.Loaded
 
             } catch (error: Exception) {
                 _uiState.value = MenuUIState.Error(error.printStackTrace().toString())

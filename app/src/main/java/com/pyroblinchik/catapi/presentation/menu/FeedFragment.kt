@@ -15,6 +15,7 @@ import com.pyroblinchik.catapi.databinding.FragmentFeedBinding
 import com.pyroblinchik.catapi.domain.base.models.Breed
 import com.pyroblinchik.catapi.domain.base.models.BreedShort
 import com.pyroblinchik.catapi.presentation.base.BaseFragment
+import com.pyroblinchik.catapi.presentation.breedCard.BreedCardActivity
 import com.pyroblinchik.catapi.presentation.menu.view.BreedsAdapter
 
 class FeedFragment : BaseFragment<FragmentFeedBinding>() {
@@ -24,12 +25,14 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>() {
 
     val emptyResult =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+            viewModel.getBreeds()
         }
 
     override fun constructViewBinding(): ViewBinding =
         FragmentFeedBinding.inflate(layoutInflater)
 
     override fun init(viewBinding: ViewBinding, savedInstanceState: Bundle?) {
+        viewModel.getBreeds()
         initUI()
     }
 
@@ -51,7 +54,7 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>() {
 
     private fun setBreeds() {
         val onItemClickListener: ((breed: BreedShort) -> Unit) = {
-//            BreedCardActivity.startForResult(requireActivity(),it,emptyResult)
+            BreedCardActivity.startForResultFromNetwork(requireActivity(),it.id,emptyResult)
         }
 
         breedsAdapter = BreedsAdapter(

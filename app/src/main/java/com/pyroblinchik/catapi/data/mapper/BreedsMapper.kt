@@ -49,7 +49,8 @@ class BreedsMapper @Inject constructor() {
         dbModel.shortLegs,
         dbModel.wikipediaUrl,
         dbModel.hypoallergenic,
-        dbModel.referenceImageId
+        dbModel.referenceImageId,
+        dbModel.isFavorite
     )
 
     fun mapEntityToDBModel(breed: Breed) = BreedDBModel(
@@ -87,7 +88,8 @@ class BreedsMapper @Inject constructor() {
         breed.shortLegs,
         breed.wikipediaUrl,
         breed.hypoallergenic,
-        breed.referenceImageId
+        breed.referenceImageId,
+        true
     )
 
     fun mapBreedDtoModelToEntity(response: BreedResponseDto) = Breed(

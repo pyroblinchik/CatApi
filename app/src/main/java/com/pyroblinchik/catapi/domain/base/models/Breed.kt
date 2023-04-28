@@ -36,5 +36,6 @@ data class Breed(
     var shortLegs: Int? = null,
     var wikipediaUrl: String? = null,
     var hypoallergenic: Int? = null,
-    var referenceImageId: String? = null
+    var referenceImageId: String? = null,
+    var isFavorite: Boolean = false
 )

@@ -3,6 +3,7 @@ package com.pyroblinchik.catapi.di.base
 import android.app.Application
 import com.pyroblinchik.catapi.CatApplication
 import com.pyroblinchik.catapi.di.DataModule
+import com.pyroblinchik.catapi.presentation.breedCard.BreedCardActivity
 import com.pyroblinchik.catapi.presentation.menu.FavoritesFragment
 import com.pyroblinchik.catapi.presentation.menu.FeedFragment
 import com.pyroblinchik.catapi.presentation.menu.MenuActivity
@@ -23,9 +24,10 @@ interface ApplicationComponent {
     fun inject(fragment: FavoritesFragment)
 
     fun inject(activity: MenuActivity)
-    fun inject(application: CatApplication)
 
-//    fun inject(application: CatApplication)
+    fun inject(activity: BreedCardActivity)
+
+    fun inject(application: CatApplication)
 
     @Component.Factory
     interface Factory {

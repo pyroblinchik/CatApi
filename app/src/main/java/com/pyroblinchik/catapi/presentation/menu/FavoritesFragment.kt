@@ -14,6 +14,7 @@ import androidx.viewbinding.ViewBinding
 import com.pyroblinchik.catapi.databinding.FragmentFavoritesBinding
 import com.pyroblinchik.catapi.domain.base.models.BreedShort
 import com.pyroblinchik.catapi.presentation.base.BaseFragment
+import com.pyroblinchik.catapi.presentation.breedCard.BreedCardActivity
 import com.pyroblinchik.catapi.presentation.menu.view.BreedsAdapter
 
 class FavoritesFragment : BaseFragment<FragmentFavoritesBinding>()  {
@@ -24,12 +25,14 @@ class FavoritesFragment : BaseFragment<FragmentFavoritesBinding>()  {
 
     val emptyResult =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+            viewModel.getBreedsFavorites()
         }
 
     override fun constructViewBinding(): ViewBinding =
         FragmentFavoritesBinding.inflate(layoutInflater)
 
     override fun init(viewBinding: ViewBinding, savedInstanceState: Bundle?) {
+        viewModel.getBreedsFavorites()
         initUI()
     }
 
@@ -53,7 +56,7 @@ class FavoritesFragment : BaseFragment<FragmentFavoritesBinding>()  {
 
     private fun setBreedsFavorites() {
         val onItemClickListener: ((breed: BreedShort) -> Unit) = {
-//            BreedCardActivity.startForResult(requireActivity(),it,emptyResult)
+            BreedCardActivity.startForResultFromFavorites(requireActivity(),it.id,emptyResult)
         }
 
         breedsFavoritesAdapter = BreedsAdapter(
