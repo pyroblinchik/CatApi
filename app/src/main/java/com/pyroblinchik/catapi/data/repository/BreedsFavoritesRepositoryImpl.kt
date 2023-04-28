@@ -10,8 +10,9 @@ import com.pyroblinchik.catapi.domain.base.models.BreedShort
 import com.pyroblinchik.catapi.domain.breeds.BreedsRepository
 import com.pyroblinchik.catapi.domain.breedsFavorites.BreedsFavoritesRepository
 import timber.log.Timber
+import javax.inject.Inject
 
-class BreedsFavoritesRepositoryImpl constructor(
+class BreedsFavoritesRepositoryImpl @Inject constructor(
     private val mapper: BreedsMapper,
     private val dao: BreedsDao
 ) : BreedsFavoritesRepository {

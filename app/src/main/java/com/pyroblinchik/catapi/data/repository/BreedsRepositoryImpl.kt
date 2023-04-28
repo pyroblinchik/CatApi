@@ -7,8 +7,9 @@ import com.pyroblinchik.catapi.domain.base.models.Breed
 import com.pyroblinchik.catapi.domain.base.models.BreedShort
 import com.pyroblinchik.catapi.domain.breeds.BreedsRepository
 import timber.log.Timber
+import javax.inject.Inject
 
-class BreedsRepositoryImpl constructor(
+class BreedsRepositoryImpl @Inject constructor(
     private val mapper: BreedsMapper
 ) : BreedsRepository {
 

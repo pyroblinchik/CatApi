@@ -1,27 +1,40 @@
 package com.pyroblinchik.catapi.presentation.menu
 
-import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
+import android.text.format.DateFormat
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.widget.ProgressBar
-import androidx.activity.result.ActivityResultLauncher
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
+import com.pyroblinchik.catapi.CatApplication
 import com.pyroblinchik.catapi.R
 import com.pyroblinchik.catapi.databinding.ActivityMenuBinding
-import com.pyroblinchik.catapi.util.view.gone
-import com.pyroblinchik.catapi.util.view.visible
+import com.pyroblinchik.catapi.presentation.base.ViewModelFactory
 import com.pyroblinchik.catapi.util.view.IProgressView
 import com.pyroblinchik.catapi.util.view.ISetToolbar
+import com.pyroblinchik.catapi.util.view.gone
+import com.pyroblinchik.catapi.util.view.visible
+import kotlinx.coroutines.launch
 import timber.log.Timber
+import javax.inject.Inject
 
 class MenuActivity : AppCompatActivity(), ISetToolbar, IProgressView {
-
     private lateinit var binding: ActivityMenuBinding
+    private lateinit var viewModel: MenuViewModel
+
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
+
+    private val component by lazy {
+        (application as CatApplication).component
+    }
+
 
     private val progressView: ProgressBar by lazy {
         binding.progressView
@@ -37,11 +50,11 @@ class MenuActivity : AppCompatActivity(), ISetToolbar, IProgressView {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        component.inject(this)
         binding = ActivityMenuBinding.inflate(layoutInflater)
 
-        setTheme(R.style.Theme_CatApi)
         setContentView(binding.root)
+        viewModel = ViewModelProvider(this, viewModelFactory)[MenuViewModel::class.java]
 
         initUI()
     }
@@ -70,34 +83,32 @@ class MenuActivity : AppCompatActivity(), ISetToolbar, IProgressView {
         addClickListeners()
     }
 
+
     fun addObservers() {
-//        viewModel.activeTab.observe(this) {
-//            invalidateOptionsMenu()
-//        }
-//
-//        lifecycleScope.launch {
-//            repeatOnLifecycle(Lifecycle.State.STARTED) {
-//                viewModel.uiState.collect { state ->
-//                    when (state) {
-//                        is MenuUIState.Error -> {
-//                            Timber.e("error")
-////                            checkStateForTimeout(state.message)
-//                            hideLoading()
-//                        }
-//                        is MenuUIState.Loading -> {
-//                            Timber.e("loading")
-//                            showLoading()
-//                        }
-//                        is MenuUIState.Finish -> {
-//                            finish()
-//                        }
-//                        else -> {
-//                            hideLoading()
-//                        }
-//                    }
-//                }
-//            }
-//        }
+        viewModel.activeTab.observe(this) {
+            invalidateOptionsMenu()
+        }
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.uiState.collect { state ->
+                    when (state) {
+                        is MenuUIState.Error -> {
+                            Timber.e("error")
+//                            checkStateForTimeout(state.message)
+                            hideLoading()
+                        }
+                        is MenuUIState.Loading -> {
+                            Timber.e("loading")
+                            showLoading()
+                        }
+                        else -> {
+                            hideLoading()
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private fun addClickListeners() {
@@ -121,10 +132,16 @@ class MenuActivity : AppCompatActivity(), ISetToolbar, IProgressView {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.empty_menu, menu)
+        when (viewModel.activeTab.value) {
+            0 -> {
+                menuInflater.inflate(R.menu.empty_menu, menu)
+            }
+            1 -> {
+                menuInflater.inflate(R.menu.empty_menu, menu)
+            }
+        }
         return super.onCreateOptionsMenu(menu)
     }
-
     override fun onBackPressed() {
         backPressed()
     }
@@ -154,25 +171,6 @@ class MenuActivity : AppCompatActivity(), ISetToolbar, IProgressView {
         private const val MODE_UNKNOWN = 0
 
         var requestCode = MODE_UNKNOWN
-
-
-        fun startForResult(
-            activity: Activity,
-            result: ActivityResultLauncher<Intent>,
-            view: View,
-        ) {
-            createActivityForResult(activity, result, view)
-        }
-
-        private fun createActivityForResult(
-            activity: Activity,
-            result: ActivityResultLauncher<Intent>,
-            view: View,
-        ) {
-            result.launch(
-                Intent(activity, MenuActivity::class.java),
-            )
-        }
 
     }
 }

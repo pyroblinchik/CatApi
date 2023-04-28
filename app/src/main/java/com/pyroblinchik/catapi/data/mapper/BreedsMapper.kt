@@ -4,9 +4,10 @@ import com.pyroblinchik.catapi.data.database.model.BreedDBModel
 import com.pyroblinchik.catapi.data.network.model.BreedResponseDto
 import com.pyroblinchik.catapi.domain.base.models.Breed
 import com.pyroblinchik.catapi.domain.base.models.BreedShort
+import javax.inject.Inject
 import kotlin.collections.ArrayList
 
-class BreedsMapper constructor() {
+class BreedsMapper @Inject constructor() {
 
     fun mapDbModelToEntityShort(dbModel: BreedDBModel) = BreedShort(
         dbModel.id,

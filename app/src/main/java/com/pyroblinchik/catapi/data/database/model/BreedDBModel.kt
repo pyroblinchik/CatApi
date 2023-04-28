@@ -1,5 +1,6 @@
 package com.pyroblinchik.catapi.data.database.model
 
+import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.pyroblinchik.catapi.domain.base.models.Weight
@@ -10,6 +11,7 @@ import com.pyroblinchik.catapi.domain.base.models.Weight
 data class BreedDBModel(
     @PrimaryKey
     var id: String,
+    @Embedded(prefix = "weight")
     var weight: Weight?,
     var name: String?,
     var temperament: String?,
