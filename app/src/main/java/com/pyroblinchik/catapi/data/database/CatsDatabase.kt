@@ -12,7 +12,7 @@ import com.pyroblinchik.catapi.data.database.model.BreedDBModel
     entities = [
         BreedDBModel::class
     ],
-    version = 1
+    version = 2
 )
 @TypeConverters(OfflineConverter::class)
 abstract class AppDatabase : RoomDatabase() {

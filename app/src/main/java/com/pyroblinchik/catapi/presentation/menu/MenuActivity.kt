@@ -102,6 +102,9 @@ class MenuActivity : AppCompatActivity(), ISetToolbar, IProgressView {
                             Timber.e("loading")
                             showLoading()
                         }
+                        is MenuUIState.Loaded -> {
+                            hideLoading()
+                        }
                         else -> {
                             hideLoading()
                         }

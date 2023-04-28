@@ -45,5 +45,5 @@ data class BreedDBModel(
     var shortLegs: Int?,
     var wikipediaUrl: String?,
     var hypoallergenic: Int?,
-    var referenceImageId: Int?
+    var referenceImageId: String?
 )

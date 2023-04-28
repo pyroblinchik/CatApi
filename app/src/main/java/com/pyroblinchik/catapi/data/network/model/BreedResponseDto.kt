@@ -37,5 +37,5 @@ data class BreedResponseDto (
     var short_legs: Int? = null,
     var wikipedia_url: String? = null,
     var hypoallergenic: Int? = null,
-    var reference_image_id: Int? = null
+    var reference_image_id: String? = null
 )
