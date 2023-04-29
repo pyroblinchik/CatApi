@@ -1,11 +1,15 @@
 package com.pyroblinchik.catapi.presentation.menu
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.os.Bundle
-import android.text.format.DateFormat
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.ProgressBar
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -23,6 +27,7 @@ import com.pyroblinchik.catapi.util.view.visible
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
+
 
 class MenuActivity : AppCompatActivity(), ISetToolbar, IProgressView {
     private lateinit var binding: ActivityMenuBinding
@@ -56,6 +61,7 @@ class MenuActivity : AppCompatActivity(), ISetToolbar, IProgressView {
         setContentView(binding.root)
         viewModel = ViewModelProvider(this, viewModelFactory)[MenuViewModel::class.java]
 
+        checkPermissions()
         initUI()
     }
 
@@ -83,6 +89,41 @@ class MenuActivity : AppCompatActivity(), ISetToolbar, IProgressView {
         addClickListeners()
     }
 
+    fun checkPermissions(){
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            != PackageManager.PERMISSION_GRANTED ||
+            ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+            != PackageManager.PERMISSION_GRANTED) {
+            showToast("Need Permission to access storage for Downloading Image")
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.READ_EXTERNAL_STORAGE
+                ),
+                PERMISSION_REQUEST_CODE
+            )
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == PERMISSION_REQUEST_CODE) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                showToast("Permission granted")
+            } else {
+                showToast("Permission denied")
+            }
+        }
+    }
+
+    fun showToast(msg: String?) {
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
+    }
 
     fun addObservers() {
         viewModel.activeTab.observe(this) {
@@ -172,6 +213,8 @@ class MenuActivity : AppCompatActivity(), ISetToolbar, IProgressView {
 
     companion object {
         private const val MODE_UNKNOWN = 0
+
+        private const val PERMISSION_REQUEST_CODE = 101
 
         var requestCode = MODE_UNKNOWN
 

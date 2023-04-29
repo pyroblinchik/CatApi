@@ -6,5 +6,5 @@ class GetBreedByIdFromDatabaseUseCase @Inject constructor(
     private val repository: BreedsRepository
 ) {
 
-    suspend operator fun invoke(breedId: String) = repository.getBreedById(breedId)
+    suspend operator fun invoke(breedId: String) = repository.getBreedByIdFromDatabase(breedId)
 }

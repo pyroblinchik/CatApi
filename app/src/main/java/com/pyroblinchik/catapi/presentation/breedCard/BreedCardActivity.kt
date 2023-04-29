@@ -1,13 +1,18 @@
 package com.pyroblinchik.catapi.presentation.breedCard
 
+import android.Manifest
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.ProgressBar
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -17,6 +22,8 @@ import com.pyroblinchik.catapi.R
 import com.pyroblinchik.catapi.databinding.ActivityBreedCardBinding
 import com.pyroblinchik.catapi.domain.base.models.Breed
 import com.pyroblinchik.catapi.presentation.base.ViewModelFactory
+import com.pyroblinchik.catapi.presentation.menu.MenuActivity
+import com.pyroblinchik.catapi.util.files.DownloadManagerForPhotos
 import com.pyroblinchik.catapi.util.view.IProgressView
 import com.pyroblinchik.catapi.util.view.ISetToolbar
 import com.pyroblinchik.catapi.util.view.gone
@@ -207,6 +214,43 @@ class BreedCardActivity : AppCompatActivity(), ISetToolbar, IProgressView {
                 viewModel.addBreedToFavorites()
             }
         }
+        binding.downloadImageButton.setOnClickListener {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+                showToast("Need Permission to access storage for Downloading Image")
+                ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf(
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        Manifest.permission.READ_EXTERNAL_STORAGE
+                    ),
+                    PERMISSION_REQUEST_CODE
+                )
+            } else{
+                viewModel.downloadBreedPhotoFromNetwork()
+            }
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == PERMISSION_REQUEST_CODE) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                showToast("Permission granted")
+            } else {
+                showToast("Permission denied")
+            }
+        }
+    }
+
+    fun showToast(msg: String?) {
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
     }
 
     override fun onBackPressed() {
@@ -244,6 +288,7 @@ class BreedCardActivity : AppCompatActivity(), ISetToolbar, IProgressView {
     companion object {
         const val MODE_FROM_NETWORK = 0
         const val MODE_FROM_FAVORITES = 1
+        private const val PERMISSION_REQUEST_CODE = 101
 
         var breedId = "0"
         var requestCode = MODE_FROM_NETWORK

@@ -6,5 +6,5 @@ class DeleteBreedFromDatabaseUseCase @Inject constructor(
     private val repository: BreedsRepository
 ) {
 
-    suspend operator fun invoke(breedId: String) = repository.deleteBreed(breedId)
+    suspend operator fun invoke(breedId: String) = repository.deleteBreedFromDatabase(breedId)
 }

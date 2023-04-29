@@ -44,7 +44,7 @@ class BreedsRepositoryImpl @Inject constructor(
     }
 
     // DATABASE
-    override suspend fun getBreedsFavoritesList(): List<BreedShort> {
+    override suspend fun getBreedsFavoritesListFromDatabase(): List<BreedShort> {
         val listDB = dao.getBreedsFavorites()
         val list = ArrayList<BreedShort>()
         listDB?.forEach {
@@ -53,17 +53,17 @@ class BreedsRepositoryImpl @Inject constructor(
         return list
     }
 
-    override suspend fun getBreedById(breedId: String): Breed {
+    override suspend fun getBreedByIdFromDatabase(breedId: String): Breed {
         val breed = dao.getBreedById(breedId)
 
         return mapper.mapDbModelToEntity(breed!!)
     }
 
-    override suspend fun addBreedToFavorites(breed: Breed) {
+    override suspend fun addBreedToFavoritesDatabase(breed: Breed) {
         dao.insertBreedFavorite(mapper.mapEntityToDBModel(breed))
     }
 
-    override suspend fun deleteBreed(breedId: String) {
+    override suspend fun deleteBreedFromDatabase(breedId: String) {
         dao.deleteBreed(breedId)
     }
 

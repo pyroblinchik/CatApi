@@ -9,6 +9,7 @@ import com.pyroblinchik.catapi.domain.breeds.GetBreedByIdFromNetworkUseCase
 import com.pyroblinchik.catapi.domain.breeds.AddBreedToFavoritesDatabaseUseCase
 import com.pyroblinchik.catapi.domain.breeds.DeleteBreedFromDatabaseUseCase
 import com.pyroblinchik.catapi.domain.breeds.GetBreedByIdFromDatabaseUseCase
+import com.pyroblinchik.catapi.domain.photos.GetPhotoByIdFromNetworkUseCase
 import com.pyroblinchik.catapi.presentation.breedCard.BreedCardActivity.Companion.MODE_FROM_FAVORITES
 import com.pyroblinchik.catapi.presentation.breedCard.BreedCardActivity.Companion.MODE_FROM_NETWORK
 import com.pyroblinchik.catapi.presentation.breedCard.BreedCardActivity.Companion.breedId
@@ -21,6 +22,7 @@ import javax.inject.Inject
 
 class BreedCardViewModel @Inject constructor(
     private val getBreedByIdFromNetworkUseCase: GetBreedByIdFromNetworkUseCase,
+    private val getPhotoByIdFromNetworkUseCase: GetPhotoByIdFromNetworkUseCase,
     private val getBreedFavoriteByIdFromDatabaseUseCase: GetBreedByIdFromDatabaseUseCase,
     private val addBreedToFavoritesDatabaseUseCase: AddBreedToFavoritesDatabaseUseCase,
     private val deleteBreedFromFavoritesDatabaseUseCase: DeleteBreedFromDatabaseUseCase
@@ -58,6 +60,20 @@ class BreedCardViewModel @Inject constructor(
 
                 val breed = getBreedByIdFromNetworkUseCase.invoke(breedId)
                 _breed.postValue(breed)
+                _uiState.value = BreedCardUIState.Loaded
+
+            } catch (error: Exception) {
+                _uiState.value = BreedCardUIState.Error(error.printStackTrace().toString())
+            }
+        }
+    }
+
+    fun downloadBreedPhotoFromNetwork() {
+        _uiState.value = BreedCardUIState.Loading
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+
+                getPhotoByIdFromNetworkUseCase.invoke(breed.value!!)
                 _uiState.value = BreedCardUIState.Loaded
 
             } catch (error: Exception) {

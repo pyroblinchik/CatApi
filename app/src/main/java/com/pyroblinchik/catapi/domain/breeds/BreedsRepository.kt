@@ -11,11 +11,11 @@ interface BreedsRepository {
     suspend fun getBreedByIdFromNetwork(breedId: String): Breed
 
     // DATABASE
-    suspend fun getBreedsFavoritesList(): List<BreedShort>
+    suspend fun getBreedsFavoritesListFromDatabase(): List<BreedShort>
 
-    suspend fun getBreedById(breedId: String): Breed
+    suspend fun getBreedByIdFromDatabase(breedId: String): Breed
 
-    suspend fun addBreedToFavorites(breed: Breed)
+    suspend fun addBreedToFavoritesDatabase(breed: Breed)
 
-    suspend fun deleteBreed(breedId: String)
+    suspend fun deleteBreedFromDatabase(breedId: String)
 }

@@ -6,17 +6,21 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.pyroblinchik.catapi.data.database.dao.BreedsDao
+import com.pyroblinchik.catapi.data.database.dao.PhotosDao
 import com.pyroblinchik.catapi.data.database.model.BreedDBModel
+import com.pyroblinchik.catapi.data.database.model.PhotoDBModel
 
 @Database(
     entities = [
-        BreedDBModel::class
+        BreedDBModel::class,
+        PhotoDBModel::class
     ],
-    version = 3
+    version = 4
 )
 @TypeConverters(OfflineConverter::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun breedsDao(): BreedsDao
+    abstract fun photosDao(): PhotosDao
 
     companion object {
 

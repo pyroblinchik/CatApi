@@ -1,19 +1,23 @@
 package com.pyroblinchik.catapi.presentation.menu
 
+import android.content.pm.PackageManager
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pyroblinchik.catapi.domain.base.models.BreedShort
-import com.pyroblinchik.catapi.domain.breeds.GetBreedByIdFromNetworkUseCase
-import com.pyroblinchik.catapi.domain.breeds.GetBreedsListFromNetworkUseCase
 import com.pyroblinchik.catapi.domain.breeds.AddBreedToFavoritesDatabaseUseCase
+import com.pyroblinchik.catapi.domain.breeds.GetBreedByIdFromNetworkUseCase
 import com.pyroblinchik.catapi.domain.breeds.GetBreedsFavoritesListFromDatabaseUseCase
+import com.pyroblinchik.catapi.domain.breeds.GetBreedsListFromNetworkUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+
 
 class MenuViewModel @Inject constructor(
     private val getBreedsListFromNetworkUseCase: GetBreedsListFromNetworkUseCase,

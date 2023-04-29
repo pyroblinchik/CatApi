@@ -7,5 +7,5 @@ class AddBreedToFavoritesDatabaseUseCase @Inject constructor(
     private val repository: BreedsRepository
 ) {
 
-    suspend operator fun invoke(breed: Breed) = repository.addBreedToFavorites(breed)
+    suspend operator fun invoke(breed: Breed) = repository.addBreedToFavoritesDatabase(breed)
 }
