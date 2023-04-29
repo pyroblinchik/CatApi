@@ -4,13 +4,14 @@ import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
-import androidx.appcompat.app.AppCompatActivity
+import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
@@ -22,8 +23,6 @@ import com.pyroblinchik.catapi.R
 import com.pyroblinchik.catapi.databinding.ActivityBreedCardBinding
 import com.pyroblinchik.catapi.domain.base.models.Breed
 import com.pyroblinchik.catapi.presentation.base.ViewModelFactory
-import com.pyroblinchik.catapi.presentation.menu.MenuActivity
-import com.pyroblinchik.catapi.util.files.DownloadManagerForPhotos
 import com.pyroblinchik.catapi.util.view.IProgressView
 import com.pyroblinchik.catapi.util.view.ISetToolbar
 import com.pyroblinchik.catapi.util.view.gone
@@ -74,7 +73,7 @@ class BreedCardActivity : AppCompatActivity(), ISetToolbar, IProgressView {
 
     private fun setToolbarTitle(breed: Breed) {
         binding.includeToolbar.titleToolbar.text =
-            "${breed?.name ?: ""}"
+            " ${breed?.name ?: ""}"
     }
 
     private fun initUI() {
@@ -202,6 +201,7 @@ class BreedCardActivity : AppCompatActivity(), ISetToolbar, IProgressView {
         binding.includeSuppressedTail.valueTextView.text = "${breed.suppressedTail}/5"
         binding.includeShortLegs.valueTextView.text = "${breed.suppressedTail}/5"
         binding.includeWikipediaUrl.valueTextView.text = breed.wikipediaUrl
+        binding.includeWikipediaUrl.valueTextView.setTextColor(R.color.main_cream_color)
         binding.includeHypoallergenic.valueTextView.text = "${breed.hypoallergenic}/5"
 
     }
@@ -230,6 +230,14 @@ class BreedCardActivity : AppCompatActivity(), ISetToolbar, IProgressView {
                 )
             } else{
                 viewModel.downloadBreedPhotoFromNetwork()
+                showToast("Download...")
+            }
+        }
+        binding.includeWikipediaUrl.valueTextView.setOnClickListener {
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(viewModel.breed.value!!.wikipediaUrl))
+
+            if (intent.resolveActivity(packageManager) != null) {
+                startActivity(intent)
             }
         }
     }

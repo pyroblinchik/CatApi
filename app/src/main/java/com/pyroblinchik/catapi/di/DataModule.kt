@@ -3,7 +3,6 @@ package com.pyroblinchik.catapi.di
 import android.app.Application
 import com.pyroblinchik.catapi.data.database.AppDatabase
 import com.pyroblinchik.catapi.data.database.dao.BreedsDao
-import com.pyroblinchik.catapi.data.database.dao.PhotosDao
 import com.pyroblinchik.catapi.data.repository.BreedsRepositoryImpl
 import com.pyroblinchik.catapi.data.repository.PhotosRepositoryImpl
 import com.pyroblinchik.catapi.di.base.ApplicationScope
@@ -33,14 +32,6 @@ interface DataModule {
             application: Application,
         ): BreedsDao {
             return AppDatabase.getInstance(application).breedsDao()
-        }
-
-        @Provides
-        @ApplicationScope
-        fun providePhotosDao(
-            application: Application,
-        ): PhotosDao {
-            return AppDatabase.getInstance(application).photosDao()
         }
     }
 }

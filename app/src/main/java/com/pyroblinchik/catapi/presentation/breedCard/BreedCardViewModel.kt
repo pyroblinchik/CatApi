@@ -48,7 +48,7 @@ class BreedCardViewModel @Inject constructor(
                 getBreedFavoritesFromDatabase()
             }
             else ->{
-//                throw
+                throw java.lang.IllegalArgumentException("$requestCode")
             }
         }
     }
@@ -125,7 +125,7 @@ class BreedCardViewModel @Inject constructor(
                         _uiState.value = BreedCardUIState.Finish
                     }
                     else ->{
-//                throw
+                        throw java.lang.IllegalArgumentException("$requestCode")
                     }
                 }
 

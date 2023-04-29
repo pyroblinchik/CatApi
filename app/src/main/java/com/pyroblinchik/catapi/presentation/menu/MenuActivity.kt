@@ -70,7 +70,7 @@ class MenuActivity : AppCompatActivity(), ISetToolbar, IProgressView {
         supportActionBar!!.title = ""
         supportActionBar!!.setDisplayHomeAsUpEnabled(false)
         binding.includeToolbar.titleToolbar.gone()
-//        binding.includeToolbar.mainToolbar.setLogo(R.drawable.ic_logo_horizontal)
+        binding.includeToolbar.mainToolbar.setLogo(R.drawable.ic_logo_horizontal)
     }
 
     private fun initUI() {

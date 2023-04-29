@@ -7,13 +7,5 @@ import com.pyroblinchik.catapi.domain.base.models.Photo
 interface PhotosRepository {
 
     // NETWORK
-    suspend fun getPhotoByIdFromNetwork(breed: Breed): Photo
-
-//    // DATABASE
-//
-//    suspend fun getPhotoByIdFromDatabase(breed: Breed): Photo
-//
-//    suspend fun addPhotoToDatabase(photo: Photo)
-//
-//    suspend fun deletePhotoFromDatabase(photoId: String)
+    suspend fun getPhotoByIdFromNetwork(breed: Breed)
 }
