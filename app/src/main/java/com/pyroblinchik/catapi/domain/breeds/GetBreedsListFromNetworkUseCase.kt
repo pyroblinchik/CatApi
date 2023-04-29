@@ -6,5 +6,5 @@ class GetBreedsListFromNetworkUseCase @Inject constructor(
     private val repository: BreedsRepository
 ) {
 
-    suspend operator fun invoke() = repository.getBreedsListFromNetwork()
+    suspend operator fun invoke(page: Int) = repository.getBreedsListFromNetwork(page)
 }

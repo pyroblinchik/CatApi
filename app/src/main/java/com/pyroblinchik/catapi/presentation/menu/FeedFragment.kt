@@ -10,6 +10,8 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 import com.pyroblinchik.catapi.databinding.FragmentFeedBinding
 import com.pyroblinchik.catapi.domain.base.models.Breed
@@ -45,6 +47,9 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>() {
         viewModel.breeds.observe(this) { list ->
             breedsAdapter.submitList(list)
         }
+        viewModel.page.observe(this){
+            viewModel.getBreeds()
+        }
     }
 
     override fun onResume() {
@@ -61,5 +66,20 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>() {
             onItemClickListener
         )
         getViewBinding().breedsListView.adapter = breedsAdapter
+
+        getViewBinding().breedsListView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                val visibleItemCount = layoutManager.childCount
+                val totalItemCount = layoutManager.itemCount
+                val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
+
+                if (visibleItemCount + firstVisibleItemPosition >= totalItemCount && firstVisibleItemPosition >= 0) {
+
+                    viewModel.updatePageInPagination()
+                }
+            }
+        })
     }
 }

@@ -6,7 +6,7 @@ import com.pyroblinchik.catapi.domain.base.models.BreedShort
 interface BreedsRepository {
 
     // NETWORK
-    suspend fun getBreedsListFromNetwork(): List<BreedShort>
+    suspend fun getBreedsListFromNetwork(page: Int): List<BreedShort>
 
     suspend fun getBreedByIdFromNetwork(breedId: String): Breed
 

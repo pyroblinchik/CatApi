@@ -30,6 +30,9 @@ class MenuViewModel @Inject constructor(
     val activeTab: LiveData<Int>
         get() = _activeTab
 
+    private val _page = MutableLiveData<Int>()
+    val page: LiveData<Int>
+        get() = _page
 
     private val _breeds = MutableLiveData<List<BreedShort>>()
     val breeds: LiveData<List<BreedShort>>
@@ -43,7 +46,7 @@ class MenuViewModel @Inject constructor(
     val uiState: StateFlow<MenuUIState> = _uiState
 
     init {
-//        getBreeds()
+        _page.value = 0
     }
 
     fun getBreeds() {
@@ -51,8 +54,14 @@ class MenuViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             try {
 
-                val breeds = getBreedsListFromNetworkUseCase.invoke()
-                _breeds.postValue(breeds)
+                val breeds = getBreedsListFromNetworkUseCase.invoke(_page.value!!)
+
+                if (page.value!! == 0){
+                    _breeds.postValue(breeds)
+                } else{
+                    val tempBreeds = _breeds.value!!
+                    _breeds.postValue(tempBreeds + breeds)
+                }
                 _uiState.value = MenuUIState.Loaded
 
             } catch (error: Exception) {
@@ -77,7 +86,13 @@ class MenuViewModel @Inject constructor(
     }
 
     fun updateActiveTab(tab: Int) {
+        _page.value = 0
         _activeTab.value = tab
     }
 
+    fun updatePageInPagination() {
+        var tempPage = _page.value!!
+        tempPage++
+        _page.postValue(tempPage)
+    }
 }

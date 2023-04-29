@@ -1,6 +1,7 @@
 package com.pyroblinchik.catapi.data.repository
 
 import android.app.Application
+import com.pyroblinchik.catapi.data.Constants.PAGINATION_LIMIT
 import com.pyroblinchik.catapi.data.database.dao.BreedsDao
 import com.pyroblinchik.catapi.data.mapper.BreedsMapper
 import com.pyroblinchik.catapi.data.network.factory.BreedApiFactory
@@ -16,11 +17,11 @@ class BreedsRepositoryImpl @Inject constructor(
 ) : BreedsRepository {
 
     // NETWORK
-    override suspend fun getBreedsListFromNetwork(): List<BreedShort> {
+    override suspend fun getBreedsListFromNetwork(page: Int): List<BreedShort> {
         val result =
             BreedApiFactory().apiService.getBreeds(
-                0,
-                10
+                page,
+                PAGINATION_LIMIT
             )
         Timber.d(result.toString())
 
